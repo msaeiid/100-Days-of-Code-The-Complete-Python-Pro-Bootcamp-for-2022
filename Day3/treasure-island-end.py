@@ -32,5 +32,16 @@ if direction == 'left':
         doors = input(
             'You arrive at the island unharmed.There is a house with 3 doors,One "red", one "yellow" and one "blue". Which colour do you choose?\n').lower()
         if doors == 'yellow':
-            user_message = "You Win!"
+            user_message = "You found the treasure. You Win!"
+        elif doors == "red":
+            user_message = "It's a room full of fire. Game is over"
+        elif doors == 'blue':
+            user_message = "You enter a room beasts. Game Over!"
+        else:
+            user_message = "You choose a door that doesn't exists.Game over"
+ 
+    else:
+        print("You got attacked by an angry. Game over!")
+else:
+    user_message = "You fell into a hole.Game OVER!"
 print(user_message)
