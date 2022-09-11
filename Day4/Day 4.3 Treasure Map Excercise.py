@@ -11,4 +11,3 @@ if col <= 2 and row <= 2:
     print(f"{map[0]}\n{map[1]}\n{map[2]}\n")
 else:
     print('Wrong position')
-
