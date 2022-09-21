@@ -40,6 +40,7 @@ def calculate_score(cards_list: list):
 
 
 def check_winner(user_cards: list, computer_cards: list):
+
     user_score = 0
     number_of_ace_in_userhand = 0
     for card in user_cards:
@@ -96,6 +97,11 @@ def play_game():
         print(f'Your cards: {user_cards}, current score: {user_score}')
         print(
             f"Computer's first card: {computer_cards[0]} => {cards[computer_cards[0]]}")
+
+        if computer_score >= 21 or user_score >= 21:
+            result = check_winner(user_cards, computer_cards)
+            print(result)
+
         another_card = input(
             "Type 'y' to get another card, type 'n' to pass: ")
         if another_card == 'y':
