@@ -26,98 +26,85 @@ def get_random_cards(number_of_cards: int):
         number_of_cards (int): number of random cards which needed
     """
     random_cards = []
-    for i in range(number_of_cards):
+    for _ in range(number_of_cards):
         random_card = random.choice(cards_list)
         random_cards.append(random_card)
     return random_cards
 
 
 def calculate_score(cards_list: list):
+    """
+        Take a list of cards and return the score calculated from the cards
+    """
     score = 0
     for card in cards_list:
         score += cards[card]
+    #check for blackjack
+    if score == 21 and len(cards_list) == 2:
+        return 0
+    #check for ace if score is more than 21
+    if 'ace' in cards_list and score > 21:
+        score -= 10
     return score
 
 
-def check_winner(user_cards: list, computer_cards: list):
+def compare(user_score: int, computer_score: int):
 
-    user_score = 0
-    number_of_ace_in_userhand = 0
-    for card in user_cards:
-        user_score += cards[card]
-        if card == 'Ace':
-            number_of_ace_in_userhand += 1
-
-    computer_score = 0
-    number_of_ace_in_computerhand = 0
-    for card in computer_cards:
-        computer_score += cards[card]
-        if card == 'Ace':
-            number_of_ace_in_computerhand += 1
-
-    while user_score > 21 and number_of_ace_in_userhand > 0:
-        user_score -= 10
-        number_of_ace_in_userhand -= 1
-    while computer_score > 21 and number_of_ace_in_userhand > 0:
-        computer_score -= 10
-        number_of_ace_in_computerhand -= 1
-
-    print(f'Your final hand: {user_cards}, final score: {user_score}')
-    print(
-        f"Computer's final hand: {computer_cards} final score: {computer_score}")
-
-    lose_message = 'lose'
-    win_message = 'win'
-    draw_message = 'Draw'
-
-    if (user_score > 21 and computer_score > 21) or user_score == computer_score:
-        return draw_message
+    if user_score == computer_score:
+        return " Draw"
+    elif computer_score == 0:
+        return "Lose, opponent has Blackjack"
+    elif user_score == 0:
+        return "Win with a Blackjack"
     elif user_score > 21:
-        return lose_message
+        return "You went over, You lose"
     elif computer_score > 21:
-        return win_message
+        return "Opponent went over. You win"
     elif user_score > computer_score:
-        return win_message
+        return "You win"
     else:
-        return lose_message
+        return "You lose"
 
 
 def play_game():
-    if input("Do you want to play a game of Blackjack? Type 'y' or 'n': ") == 'y':
-        game_is_over = False
-    else:
-        game_is_over = True
-    while not game_is_over:
-        os.system('cls')
-        print(logo)
+    is_game_over = False
+    if input("Do you want to play a game of Blackjack? Type 'y' or 'n': ") == 'n':
+        is_game_over = True
+    os.system('cls')
+    print(logo)
+    while not is_game_over:
+        # start game with 2 card
         user_cards = get_random_cards(2)
-        user_score = calculate_score(user_cards)
         computer_cards = get_random_cards(2)
+        #calculate user and computer score
+        user_score = calculate_score(user_cards)
         computer_score = calculate_score(computer_cards)
+
         print(f'Your cards: {user_cards}, current score: {user_score}')
         print(
-            f"Computer's first card: {computer_cards[0]} => {cards[computer_cards[0]]}")
-
-        if computer_score >= 21 or user_score >= 21:
-            result = check_winner(user_cards, computer_cards)
-            print(result)
-
-        another_card = input(
-            "Type 'y' to get another card, type 'n' to pass: ")
-        if another_card == 'y':
-            user_cards += get_random_cards(1)
-            user_score = calculate_score(user_cards)
-            print(f'Your cards: {user_cards}, current score: {user_score}')
-            print(
-                f"Computer's first card: {computer_cards[0]} => {cards[computer_cards[0]]}")
-
-        result = check_winner(user_cards, computer_cards)
-        print(result)
-
-        if input("Do you want to play a game of Blackjack? Type 'y' or 'n': ") == 'y':
-            game_is_over = False
+            f"Computer's first card: {computer_cards[0]}  {cards[computer_cards[0]]}")
+        if user_score == 0 or computer_score == 0 or user_score > 21 or computer_score > 21:
+            is_game_over = True
         else:
-            game_is_over = True
+            another_card = input(
+                "Type 'y' to get another card, type 'n' to pass: ")
+            if another_card == 'y':
+                user_cards += get_random_cards(1)
+                user_score = calculate_score(user_cards)
+                print(f'Your cards: {user_cards}, current score: {user_score}')
+                print(
+                    f"Computer's first card: {computer_cards[0]} => {cards[computer_cards[0]]}")
+            else:
+                is_game_over = True
+
+    while computer_score != 0 and computer_score < 17:
+        computer_cards += get_random_cards(1)
+        computer_score = calculate_score(computer_cards)
+
+    print(f"Your final hand: {user_cards}, final score: {user_score}")
+    print(f"Computer final hand: {computer_cards}, final score: {computer_score}")
+    print(compare(user_score, computer_score))
+    play_game()
 
 
 play_game()
