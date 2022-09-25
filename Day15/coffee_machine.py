@@ -4,10 +4,14 @@ from data import coins, hot_flavours, resources, get_flavour, increase_money
 def report_resources():
     """print report.
     """
-    print(f"Water: {resources['water']}ml\n"
-          f"Milk: {resources['milk']}ml\n"
-          f"Coffee: {resources['coffee']}g\n"
-          f"Money: ${resources['money']}\n")
+
+    for resource in resources:
+        if resource in ["water", "milk"]:
+            print(f" {resource.capitalize()}: {resources[resource]}ml")
+        elif resource == 'coffee':
+            print(f"Coffee: {resources['coffee']}g")
+        elif resource == 'money':
+          print(f"Money: ${resources['money']}\n")
 
 
 def process_coins(order: str):
@@ -17,7 +21,7 @@ def process_coins(order: str):
         order (str): order name
 
     Returns:
-        int: total-order_price
+        int: total
         int: order_price
     """
     print("Please insert coins.")
@@ -26,11 +30,7 @@ def process_coins(order: str):
         user_input = int(input(f"How many {coin['name']}? :"))
         total += user_input*coin['value']
     order_price = get_flavour(order)['price']
-    if total - order_price >= 0:
-        return total - order_price, order_price
-    else:
-        print("Sorry that's not enough money. Money refunded.")
-        return 0, order_price
+    return total, order_price
 
 
 def check_resources(order: str):
@@ -76,14 +76,20 @@ def check_transaction(order: str):
 
     Args:
         order (str): order name
+
+    Returns:
+        int: difference
+        Bool: status transaction is successful or not
     """
-    # positive, 0 or negative
-    if check_resources(order):
-        difference, order_price = process_coins(order)
-        if difference > 0:
-            print(f"Here is ${round(difference,2)} in change.")
-            increase_money(order_price)
-            make_coffee(order)
+    total, order_price = process_coins(order)
+    difference = total-order_price
+    if difference >= 0:
+        increase_money(order_price)
+        print(f"Here is ${round(difference,2)} in change.")
+        return True
+    else:
+        print("Sorry that's not enough money. Money refunded.")
+        return False
 
 
 def start_machine():
@@ -99,7 +105,10 @@ def start_machine():
         elif user_order == 'report':
             report_resources()
         else:
-            check_transaction(user_order)
+            if check_resources(user_order):
+                status = check_transaction(user_order)
+                if status:
+                    make_coffee(user_order)
 
 
 start_machine()
