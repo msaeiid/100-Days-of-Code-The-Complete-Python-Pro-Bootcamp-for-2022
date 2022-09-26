@@ -1,4 +1,64 @@
-from data import coins, hot_flavours, resources, get_flavour, increase_money
+MENU = {
+    "espresso": {
+        "ingredients": {
+            "water": 50,
+            "coffee": 18,
+        },
+        "cost": 1.5,
+    },
+    "latte": {
+        "ingredients": {
+            "water": 200,
+            "milk": 150,
+            "coffee": 24,
+        },
+        "cost": 2.5,
+    },
+    "cappuccino": {
+        "ingredients": {
+            "water": 250,
+            "milk": 100,
+            "coffee": 24,
+        },
+        "cost": 3.0,
+    },
+}
+resources = {
+    'water': 300,
+    'milk': 200,
+    'coffee': 100,
+    'money': 0
+}
+coins = [
+    {
+        'name': 'quarters',
+        'value': 0.25
+    },
+    {
+        'name': 'dimes',
+        'value': 0.10
+    },
+    {
+        'name': 'nickles',
+        'value': 0.05
+    },
+    {
+        'name': 'pennies',
+        'value': 0.01
+    },
+]
+
+
+def get_item_from_menu(name: str):
+    return MENU['name']
+
+
+def get_price_from_menu(name: str):
+    return MENU[name]['cost']
+
+
+def increase_money(amount: int):
+    resources['money'] += amount
 
 
 def report_resources():
@@ -29,7 +89,7 @@ def process_coins(order: str):
     for coin in coins:
         user_input = int(input(f"How many {coin['name']}? :"))
         total += user_input*coin['value']
-    order_price = get_flavour(order)['price']
+    order_price = get_price_from_menu(order)
     return total, order_price
 
 
@@ -42,24 +102,20 @@ def check_resources(order: str):
     Returns:
         Bool:  sufficient resources == True else False
     """
-    for flavour in hot_flavours:
-        if flavour['name'] == order:
-            check_resources = {
-                'water': resources['water']-flavour['water'],
-                'coffee': resources['coffee']-flavour['coffee'],
-                'milk': resources['milk']-flavour['milk']
-            }
-            not_enough_list = [
-                item for item in check_resources if check_resources[item] < 0]
-            if len(not_enough_list) == 0:
-                resources['water'] -= flavour['water']
-                resources['coffee'] -= flavour['coffee']
-                resources['milk'] -= flavour['milk']
-                return True
-            else:
-                print(
-                    f"Sorry there is not enough {', '.join(not_enough_list)}")
-                return False
+    order_ingredients = MENU[order]['ingredients']
+    not_enough_list = []
+    global resources
+    resources_temp = resources
+    for item in order_ingredients:
+        if (temp := resources[item]-order_ingredients[item]) >= 0:
+            resources_temp[item] = temp
+        else:
+            not_enough_list.append(item)
+    if len(not_enough_list) == 0:
+        resources = resources_temp
+        return True
+    print(f"Sorry there is not enough {', '.join(not_enough_list)}")
+    return False
 
 
 def make_coffee(order: str):
