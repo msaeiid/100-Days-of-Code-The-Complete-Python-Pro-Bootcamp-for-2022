@@ -20,11 +20,11 @@ smtp_address = 'smtp.gmail.com'
 
 def check_today_birthday():
     global today_birthday_list
-    birthday_date = pd.read_csv('birthdays.csv')
-    birthday_date_dict = birthday_date.to_dict(orient='records')
     today = dt.datetime.now()
-    today_birthday_list = [person for person in birthday_date_dict if
-                           person['month'] == today.month and person['day'] == today.day]
+    today_tuple = (today.month, today.day)
+    data = pd.read_csv('birthdays.csv')
+    birthday_dict = {(data_row['month'], data_row['day']): data_row for (index, data_row) in data.iterrows()}
+    today_birthday_list = [value for key, value in birthday_dict.items() if key == today_tuple]
 
 
 # 3. If step 2 is true, pick a random letter from letter templates and replace the [NAME] with the person's actual name from birthdays.csv
