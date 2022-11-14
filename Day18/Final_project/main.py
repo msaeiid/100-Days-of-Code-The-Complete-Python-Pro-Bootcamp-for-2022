@@ -23,7 +23,7 @@ class HirstPainting:
         self.jim.hideturtle()
 
     def make_random_color_list(self):
-        colors = colorgram.extract("image.jpg", 37)
+        colors = colorgram.extract("images.jpg", 37)
         self.colors = [(color.rgb[0], color.rgb[1], color.rgb[2]) for color in colors]
 
     def initiate_game(self):

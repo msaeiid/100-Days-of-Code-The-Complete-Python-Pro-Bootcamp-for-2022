@@ -1,0 +1,27 @@
+h1 {
+    color: red;
+}
+
+p {
+    color: #66BFBF;
+}
+
+img.bacon-img {
+    background-color: green;
+}
+
+img.brocolli-img {
+    background-color: red;
+}
+
+#special {
+    color: green;
+}
+
+.circular {
+    border-radius: 100px;
+}
+
+img:hover {
+    background-color: gold;
+}
