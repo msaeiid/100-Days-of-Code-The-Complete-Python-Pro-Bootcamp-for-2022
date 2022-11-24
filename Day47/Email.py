@@ -2,11 +2,11 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-SMTP_ADDRESS = "smtp.mail.yahoo.com"
-PORT = "465"
-SENDER_ADDRESS = "karbaschian_saeed@yahoo.com"
-SENDER_PASSWORD = "77002783Sas"
-RECEIVER_ADDRESS = "karbaschian_saeed@yahoo.com"
+SMTP_ADDRESS = "#"
+PORT = "#"
+SENDER_ADDRESS = "#"
+SENDER_PASSWORD = "#"
+RECEIVER_ADDRESS = "#"
 
 
 class Email:
