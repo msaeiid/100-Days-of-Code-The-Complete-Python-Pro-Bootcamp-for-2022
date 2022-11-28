@@ -7,8 +7,8 @@ driver = webdriver.Chrome(executable_path=chrome_driver_path)
 driver.get("https://www.python.org/")
 
 times = driver.find_elements(by=By.CSS_SELECTOR, value=".event-widget time")
-texts = driver.find_elements(by=By.CSS_SELECTOR, value=".event-widget a")
-texts = texts[1:]
+texts = driver.find_elements(by=By.CSS_SELECTOR, value=".event-widget li a")
 events = {}
 for i in range(len(times)):
     events[i] = {'time': times[i].text, 'name': texts[i].text}
+print('')
